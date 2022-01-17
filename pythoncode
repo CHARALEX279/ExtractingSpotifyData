@@ -1,0 +1,80 @@
+#extract data of my top Tracks and artist
+
+import sqlalchemy
+import pandas as pd
+from sqlalchemy.orm import sessionmaker
+import requests
+import json
+from datetime import datetime
+import datetime
+import sqlite3
+
+
+
+#DATABASE_LOCATION = "TBD"
+ARTISTTOKEN = ""
+TRACKTOKEN = ""
+#tokens generated here: https://developer.spotify.com/console/get-current-user-top-artists-and-tracks/
+
+
+#This function is the validation step to be used during the loading process. Not yet relevant.
+#df = pd.DataFrame
+
+def validateData(df, nf) -> bool:
+
+    #check to see id dataframe is empty
+    if df: #.empty:
+        print("No information was downloaded. Closing process")
+        return False
+
+    
+    #fill in the key
+    if df == False: #pd.Series(df[' ']).is_unique:
+        pass
+    else:
+        raise Exception("Primary key check is violated")
+
+    #find nulls
+    if nf == False: #.isnull().values.any():
+        raise Exception("Null values found")
+
+
+    return True
+
+
+
+headers = {
+        "Accept" : "application/json",
+        "Content-Type" : "application/json",
+        "Authorization" : "Bearer {token}".format(token = ARTISTTOKEN)
+}
+
+artistRequest = requests.get("https://api.spotify.com/v1/me/top/artists", headers = headers)
+trackRequest = requests.get("https://api.spotify.com/v1/me/top/tracks", headers = headers)
+artistData = artistRequest.json()
+trackData = trackRequest.json()
+
+
+
+#make empty list of artists and songs from data
+tracksList = []
+artistsList = []
+
+
+#extracting artists and tracks from data
+for artist in artistData["items"]:
+    artistsList.append(artist["name"])
+
+print(artistsList)
+
+
+for track in trackData["items"]:
+    tracksList.append(track["name"])
+
+print(tracksList)
+
+
+
+
+
+
